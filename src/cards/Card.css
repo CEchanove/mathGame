@@ -9,7 +9,7 @@
     }
     
     .card .front{
-        background-color: #fff;
+        /* background-color: #fff; */
         /* display: flex;
         justify-content: center;
         align-items: center; */
@@ -21,7 +21,7 @@
         margin: auto;
     }
     
-    .card .front.matched{
+    .card .matched{
         background-color:  #4FA637;
     }
     
