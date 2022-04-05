@@ -133,8 +133,10 @@ function App() {
           />
         ))}
       </div>
-      <p>Turns: {turn}</p>
-      <p>Total: {matchTotal}</p>
+      <div className="stats">
+        <p>Turns: {turn}</p>
+        <p>Total: {matchTotal}</p>
+      </div>
     </div>
   );
 }

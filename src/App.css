@@ -127,6 +127,8 @@ p {
   margin-left: -20%;
 }
 
-/* .grid div img {
+.stats {
+  display: flex;
   width: 80%;
-} */
+  justify-content: space-evenly;
+}
