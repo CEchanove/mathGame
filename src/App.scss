@@ -38,7 +38,6 @@ main {
     font-family: Headings;
     font-size: 5rem;
     text-transform: uppercase;
-    // color: $fontColor;
     color: $blue;
 
     .one {
@@ -56,17 +55,91 @@ main {
     width: 50%;
     margin: auto;
     button {
-      font-family: Headings;
-      border: none;
-      border-radius: 1rem;
-      background-color: $yellow;
-      color: $blue;
-      font-size: 1.5rem;
-      cursor: pointer;
-      text-align: center;
-      padding: 0.8em 1.8em;
-      box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+      @include main-button;    
     }
-  
+  }
+}
+
+.login{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  h6{
+    font-size: 2rem;
+    margin-bottom: 2vh;
+    @include textFont;
+    color: $red;
+  }
+  input{
+    border: none;
+    border-radius: .5rem;
+    padding: 1% 2%;
+    margin-bottom: 2vh;
+  }
+  button{
+    @include main-button;
+  }
+}
+
+@keyframes slide {
+  100%{
+    left: 35vw;
+  }
+}
+@keyframes slidein {
+  100%{
+    left: 60vw;
+  }
+}
+@keyframes slideright{
+  100%{
+    right: 45vw;
+}
+}
+@keyframes pulsate{
+  0%{
+    opacity: 0;
+  }
+  100%{
+    opacity: 1;
+  }
+}
+
+.score{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  .anim_one{
+    animation: slide .5s forwards;
+    position: absolute;
+    top: 27vh;
+    left: -100vw
+  }
+  .anim_two{
+    position: absolute;
+    top: 42vh;
+    right: -100vw;
+    animation: slideright .5s forwards;
+    color: $red;
+    animation-delay: .5s;
+  }
+  .anim_three{
+    color: $yellow;
+    animation: slidein .5 forwards;
+    animation-delay: 1s;
+    position: absolute;
+    top: 58vh;
+    left: -100vw;
+    span{
+      animation: pulsate 1.5s infinite;
+      color: $red;
+      font-size: 5rem;
+      animation-delay: 2.5s;
+    }
+  }
+  button{
+    @include main-button;
+    position: absolute;
+    top: 10vh;
   }
 }

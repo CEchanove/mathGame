@@ -1,16 +1,17 @@
 import "./cardGame.scss";
 import { useEffect, useState } from "react";
 import Card from "./cards/Card";
-import Confetti from "react-dom-confetti";
 import card1 from './images/card1.png'
 import card2 from './images/card2.png'
 import card3 from './images/card3.png'
 import card4 from './images/card4.png'
 import card5 from './images/card5.png'
 import card6 from './images/card6.png'
+import Alert from '@mui/material/Alert';
+import CloseIcon from '@mui/icons-material/Close';
+import { useNavigate } from 'react-router-dom'
 
-
-//initial cards configuration
+//initial cards configuration make sure they are unmatched
 const initialCards = [
   { src: card1, matched: false },
   { src: card2, matched: false },
@@ -20,21 +21,6 @@ const initialCards = [
   { src: card6, matched: false },
 ];
 
-//confetti configuration
-const config = {
-  angle: 90,
-  spread: 360,
-  startVelocity: 40,
-  elementCount: "124",
-  dragFriction: "0.13",
-  duration: "10000",
-  stagger: "8",
-  width: "18px",
-  height: "14px",
-  perspective: "500px",
-  colors: ["#a864fd", "#29cdff", "#78ff44", "#ff718d", "#fdff6a"],
-};
-
 export default function CardGame() {
   const [cards, setCards] = useState([]);
   const [turn, setTurn] = useState(0);
@@ -43,12 +29,24 @@ export default function CardGame() {
   const [choiceTwo, setChoiceTwo] = useState(null);
   const [disabled, setDisabled] = useState(true);
   const [startFlip, setStartFlip] = useState(true);
-  const [showConfetti, setShowConfetti] = useState(false);
+  const [widthAlert, setWidthAlert] = useState(false)
+  const navigate = useNavigate()
 
+
+  //on screen load shows the cards and then flips them
   useEffect(() => {
+    //calculates width of the window and sets alert on if is not portrait
+    if (window.innerWidth < window.innerHeight){
+      setWidthAlert(true)
+      //sets alert off if user has not closed it in 5 seconds
+      setTimeout(() => {
+        setWidthAlert(false)
+      },5000)
+    } 
     setTimeout(() => {
       setStartFlip(false);
     }, 1500);
+    //checks if the 2 choices match
     if (choiceOne && choiceTwo) {
       setDisabled(true);
       if (choiceOne.src === choiceTwo.src) {
@@ -69,13 +67,11 @@ export default function CardGame() {
         }, 1000);
       }
     }
-    if (matchTotal === initialCards.length) {
-      setShowConfetti(true);
-    }
   }, [choiceOne, choiceTwo]);
 
+
+  //function to shuffle the cards randomising the order
   function shuffleCards() {
-    //setCards(null)
     const shuffledCards = [...initialCards, ...initialCards]
       .sort(() => Math.random() - 0.5)
       .map((card) => ({ ...card, id: Math.random() }));
@@ -85,7 +81,6 @@ export default function CardGame() {
     setCards(shuffledCards);
     setTurn(0);
     setDisabled(false);
-    setShowConfetti(false);
     setMatchTotal(0);
     setStartFlip(true);
     setTimeout(() => {
@@ -93,25 +88,38 @@ export default function CardGame() {
     }, 1000);
   }
 
+  //checks the card choice
   function handleChoice(card) {
     choiceOne
       ? choiceOne.id !== card.id && setChoiceTwo(card)
       : setChoiceOne(card);
   }
 
+  //function to reset the turn
   function resetTurn() {
     setChoiceOne(null);
     setChoiceTwo(null);
+    //counts the turns (score)
     setTurn((prevTurn) => prevTurn + 1);
     setDisabled(false);
   }
 
+  function handleFinish() {
+    localStorage.setItem("score", JSON.stringify(turn))
+    navigate("/score")
+  }
+
   return (
     <main className="container">
+      {widthAlert ? (
+        <Alert variant="filled" severity="warning" sx={{position: "absolute", width: "80vw", margin: "auto", top: "20vw"}}>
+        This game is better played on landscape
+        <CloseIcon sx={{color: "#fff", position: "relative", top: "2%", right: "2%"}} onClick={setWidthAlert(false)}/>
+      </Alert>
+      ):(
+        <></>
+      )}
       <button className="btn" onClick={() => shuffleCards()}>Start Game</button>
-      <div style={{ zIndex: "100" }}>
-        <Confetti active={showConfetti} config={config} />
-      </div>
       <div className="grid">
         {cards.map((card) => (
           <Card
@@ -133,6 +141,15 @@ export default function CardGame() {
         <p>Turns: {turn}</p>
         <p>Total: {matchTotal}</p>
       </div>
+      {matchTotal === 6 ? (
+        <div className="all-matched">
+          <h2>Well Done!</h2>
+
+          <button onClick={()=> handleFinish()}>Score</button>
+        </div>
+      ):(
+        <></>
+      )}
     </main>
   );
 }

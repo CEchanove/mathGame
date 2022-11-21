@@ -1,13 +1,19 @@
 import { useState } from "react";
 import './maths.scss'
+import { useNavigate } from "react-router-dom";
 
 export default function Maths() {
   const [answers, setAnswers] = useState([]);
+  //score variable
   const [score, setScore] = useState(0);
   const [showScore, setShowScore] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [showSubmit, setShowSubmit] = useState(false)
+  //Color variable to change with score
+  const [color, setColor] = useState("#f25749")
+  const navigate = useNavigate()
 
+  //array of questions and right answer to iterate through the game
   const questions = [
     {
       questionText: "5 + 4 =",
@@ -137,6 +143,7 @@ export default function Maths() {
     },
   ];
 
+  //function that finds the index of the question and compares to the array of questions to find answer
   const handleAnswerOptionClick = (answerOption, question) => {
     const findQuestion = (element) => element.questionText == question;
     var index = questions.findIndex(findQuestion);
@@ -153,16 +160,29 @@ export default function Maths() {
       },
     ]);
     if (answerOption.isCorrect) {
+      //contains the score
       setScore(score + 1);
     }
+
+    //function to move to the next question
     const nextQuestion = currentQuestion + 1;
+    //checks if it is the last question
     if (nextQuestion < questions.length) {
       setCurrentQuestion(nextQuestion);
     } else {
       setShowScore(true);
       setShowSubmit(true)
+      //calculates if the score is half or more
+      if(score >= questions.length/2){
+        setColor("#0da64f")
+      }
     }
   };
+
+  function handleFinish() {
+    localStorage.setItem("score", JSON.stringify(score))
+    navigate("/score")
+  }
 
   return (
     <main className="container">
@@ -170,7 +190,7 @@ export default function Maths() {
       {showScore ? (
         <div className="score-section">
           <p>
-            You scored: {score} out of {questions.length}
+            You scored: <span style={{color: color}}>{score}</span> out of {questions.length}
           </p>
         </div>
       ) : (
@@ -200,7 +220,7 @@ export default function Maths() {
         </>
       )}
       {showSubmit ? (
-        <button>Score</button>
+        <button className="score-button" onClick={()=> handleFinish()}>Score</button>
       ):(
         <></>
       )}
