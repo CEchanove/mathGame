@@ -31,6 +31,8 @@ export default function CardGame() {
   const [startFlip, setStartFlip] = useState(true);
   const [widthAlert, setWidthAlert] = useState(false)
   const navigate = useNavigate()
+  const [timer, setTimer] = useState("")
+  const [minutes, setMinutes] = useState(0)
 
 
   //on screen load shows the cards and then flips them
@@ -67,6 +69,15 @@ export default function CardGame() {
         }, 1000);
       }
     }
+    setInterval(() => {
+      let now = new Date().getTime()
+      let seconds = Math.floor((now % (1000 * 60)) / 1000);
+      if (seconds === 59){
+        setMinutes(minutes+1)
+      }
+      setTimer(seconds)
+    },1000)
+
   }, [choiceOne, choiceTwo]);
 
 
@@ -120,6 +131,7 @@ export default function CardGame() {
         <></>
       )}
       <button className="btn" onClick={() => shuffleCards()}>Start Game</button>
+      <h2>Game Started {minutes}m: {timer}s ago</h2>
       <div className="grid">
         {cards.map((card) => (
           <Card
