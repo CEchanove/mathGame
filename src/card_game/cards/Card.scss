@@ -44,4 +44,17 @@
         transform: rotateY(90deg);
         transition-delay: 0s;
     }
+    @media(max-width: $mobile){
+        width: 10vh;
+        height: 10vh;
+        .front{
+            width: 10vh;
+            height: 10vh;     
+        }
+        .back {
+            width: 10vh;
+            height: 10vh;
+            margin-left: -9.5%;    
+        }
+    }
 }

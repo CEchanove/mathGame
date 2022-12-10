@@ -34,7 +34,7 @@ main{
         button{
             font-family: Headings;
             color: $red;
-            background-color: transparent;
+            background-color:transparent;
             font-size: 3rem;
             text-align: center;
             padding: 2%;
@@ -75,5 +75,17 @@ main{
           box-shadow: 0 0 .25rem rgba(0, 0, 0, 0.5), -.125rem -.125rem 1rem rgba(239, 71, 101, 0.5), .125rem .125rem 1rem rgba(255, 154, 90, 0.5);
         }
   
+    }
+    @media(max-width: $mobile){
+        h1{
+            font-size: 1.5rem;
+        }
+        .answer-section{
+            margin-top: 4vh;
+            button{
+                font-size: 2.5rem;
+            }
+        }
+        
     }
 }
